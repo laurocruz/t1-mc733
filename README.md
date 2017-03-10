@@ -4,8 +4,7 @@ Trabalho 1 da disciplina MC733 - Professor Lucas Wanner
 # Trabalho 1
 
 # Programa 18 - Cifra de bloco AES usado modo de operação CBC
-## O programa cifra e decifra texto de bloco em bloco. Com o modo de operação CBC podemos realizar
-## essa operação para grandes extensões de texto.
+## O programa cifra e decifra texto de bloco em bloco. Com o modo de operação CBC podemos realizar essa operação para grandes extensões de texto.
 
 A cifra realiza a cifração de blocos de 128 bits com chaves de tamanho 128, 192 ou 256 bits (tamanho
 da chave ainda a ser definido). Para garantir que grandes quantidades de dados seja cifradas para
