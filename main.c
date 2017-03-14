@@ -6,6 +6,7 @@
 
 #include "aes.h"
 
+struct timespec diff(struct timespec start, struct timespec end);
 static void phex(uint8_t* str);
 static void test_encrypt_cbc(char arq[]);
 static void test_decrypt_cbc(char arq[]);
@@ -24,7 +25,18 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-
+struct timespec diff(struct timespec start, struct timespec end)
+{
+    struct timespec temp;
+    if ((end.tv_nsec-start.tv_nsec)<0) {
+        temp.tv_sec = end.tv_sec-start.tv_sec-1;
+        temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+    } else {
+        temp.tv_sec = end.tv_sec-start.tv_sec;
+        temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+    }
+    return temp;
+}
 
 // prints string as hex
 static void phex(uint8_t* str)
@@ -46,7 +58,7 @@ static void test_decrypt_cbc(char arq[])
     long length;
     uint8_t * in;
     uint8_t * buffer;
-    clock_t start, stop;
+    struct timespec cpu_t1, cpu_t2, r_t1, r_t2;
 
     if (inf) {
         fseek(inf, 0, SEEK_END);
@@ -56,14 +68,18 @@ static void test_decrypt_cbc(char arq[])
         if (in)
             fread(in, 1, length, inf);
         buffer = malloc(length);
-        if(buffer) { 
-            start = clock();
+        if(buffer) {
+            clock_gettime(CLOCK_REALTIME, &r_t1);
+            clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpu_t1);
             AES128_CBC_decrypt_buffer(buffer, in, length, key, iv);
-            stop = clock();
-            printf("DEC = %lf\n", (stop-start)/(float)CLOCKS_PER_SEC);
-            printf("DECRYPT DONE\n");
+            clock_gettime(CLOCK_REALTIME, &r_t2);
+            clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpu_t2);
+            cpu_t1 = diff(cpu_t1, cpu_t2);
+            r_t1 = diff(r_t1, r_t2);
+            printf("DEC REAL TIME = %ld.%ld\n", r_t1.tv_sec, r_t1.tv_nsec);
+            printf("DEC CPU TIME = %ld.%ld\n", cpu_t1.tv_sec, cpu_t1.tv_nsec);
         }
-    fclose(inf);
+        fclose(inf);
     }
 
 }
@@ -77,7 +93,7 @@ static void test_encrypt_cbc(char arq[])
     long length;
     uint8_t * in;
     uint8_t * buffer;
-    clock_t start, stop;
+    struct timespec cpu_t1, cpu_t2, r_t1, r_t2;
 
     if (inf) {
         fseek(inf, 0, SEEK_END);
@@ -88,11 +104,15 @@ static void test_encrypt_cbc(char arq[])
             fread(in, 1, length, inf);
         buffer = malloc(length);
         if(buffer) { 
-            start = clock();
+            clock_gettime(CLOCK_REALTIME, &r_t1);
+            clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpu_t1);
             AES128_CBC_encrypt_buffer(buffer, in, length, key, iv);
-            stop = clock();
-            printf("ENC = %lf\n", (stop-start)/(float)CLOCKS_PER_SEC);
-            printf("ENCRYPT DONE\n");
+            clock_gettime(CLOCK_REALTIME, &r_t2);
+            clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpu_t2);
+            cpu_t1 = diff(cpu_t1, cpu_t2);
+            r_t1 = diff(r_t1, r_t2);
+            printf("ENC REAL TIME = %ld.%ld\n", r_t1.tv_sec, r_t1.tv_nsec);
+            printf("ENC CPU TIME = %ld.%ld\n", cpu_t1.tv_sec, cpu_t1.tv_nsec);
         }
         fclose(inf);
     }
