@@ -7,14 +7,19 @@
 #include "aes.h"
 
 static void phex(uint8_t* str);
-static void test_encrypt_cbc(void);
-static void test_decrypt_cbc(void);
+static void test_encrypt_cbc(char arq[]);
+static void test_decrypt_cbc(char arq[]);
 
 
-int main(void)
+int main(int argc, char* argv[])
 {
-    test_encrypt_cbc();
-    test_decrypt_cbc();
+    if (argc == 1 || argc > 3)
+        printf("How to use:\n./aes arq_enc.pt [arq_dec.ct]\n");
+    else { 
+        test_encrypt_cbc(argv[1]);
+        if (argc == 3)
+            test_decrypt_cbc(argv[2]);
+    }
 
     return 0;
 }
@@ -31,13 +36,13 @@ static void phex(uint8_t* str)
 }
 
 
-static void test_decrypt_cbc(void)
+static void test_decrypt_cbc(char arq[])
 {
     // Example "simulating" a smaller buffer...
 
     uint8_t key[] = { 0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c };
     uint8_t iv[]  = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
-    FILE* inf = fopen("test500MB.ct", "r");
+    FILE* inf = fopen(arq, "r");
     long length;
     uint8_t * in;
     uint8_t * buffer;
@@ -63,12 +68,12 @@ static void test_decrypt_cbc(void)
 
 }
 
-static void test_encrypt_cbc(void)
+static void test_encrypt_cbc(char arq[])
 {
     uint8_t key[] = { 0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c };
     uint8_t iv[]  = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
 
-    FILE* inf = fopen("test500MB.pt", "r");
+    FILE* inf = fopen(arq, "r");
     long length;
     uint8_t * in;
     uint8_t * buffer;
