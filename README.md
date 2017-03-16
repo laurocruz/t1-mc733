@@ -7,13 +7,15 @@ A cifra realiza a cifração de blocos de 128 bits com chaves de tamanho 128, 19
 
 ![alt_tag](https://upload.wikimedia.org/wikipedia/commons/2/2a/CBC_decryption.svg)
 
-Podemos esperar que, para boas implementações da cifra, o tempo para realizar uma operação com plaintexts de mesmo tamanho seja a mesma. Se não, que pelo menos a operação para o mesmo plaintext seja a mesma sempre.
+Podemos esperar que, para boas implementações da cifra, o tempo para realizar uma operação com plaintexts de mesmo tamanho seja fixo. Se não, que pelo menos a execução do código para o mesmo plaintext seja a mesma sempre.
 
 ## Por que é bom para medir desempenho?
 
-Para grandes tamanhos de input (plaintext/ciphertext) podemos obter bons levantamentos do trabalho do processador, por o trabalho para cifrar cada bloco é relativamente extenso.
+Para grandes tamanhos de input (plaintext/ciphertext) podemos obter bons levantamentos do trabalho do processador, pois o trabalho para cifrar cada bloco é relativamente extenso.
 
 Usando grandes textos também podemos esperar uma utilização do disco que afetará o benchmark, visto que existe o trabalho de copiar bloco a bloco do texto para a memória, e então copiar esse bloco de volta para o disco (em forma de ciphertext/plaintext).
+
+O fato de ser escrito na linguagem C, utilizada em diversos tipos de máquina, também o torna mais relevante como benchmark, já que pode ser testado numa grande variedade de processadores.
 
 Podem existir implementações do AES que fazem uso de aceleradores ou de execução paralela. Nesse caso, se encontramos boas implementações que fazem uso dessas ferramentas, nosso benchmark também poderá fazer uma avaliação disso.
 
