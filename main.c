@@ -7,7 +7,6 @@
 #include "aes.h"
 
 struct timespec diff(struct timespec start, struct timespec end);
-static void phex(uint8_t* str);
 static void test_encrypt_cbc(char arq[]);
 static void test_decrypt_cbc(char arq[]);
 
@@ -38,19 +37,8 @@ struct timespec diff(struct timespec start, struct timespec end)
     return temp;
 }
 
-// prints string as hex
-static void phex(uint8_t* str)
-{
-    unsigned char i;
-    for(i = 0; i < 16; ++i)
-        printf("%.2x", str[i]);
-    printf("\n");
-}
-
-
 static void test_decrypt_cbc(char arq[])
 {
-    // Example "simulating" a smaller buffer...
 
     uint8_t key[] = { 0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c };
     uint8_t iv[]  = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
@@ -107,8 +95,8 @@ static void test_encrypt_cbc(char arq[])
             clock_gettime(CLOCK_REALTIME, &r_t1);
             clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpu_t1);
             AES128_CBC_encrypt_buffer(buffer, in, length, key, iv);
-            clock_gettime(CLOCK_REALTIME, &r_t2);
             clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpu_t2);
+            clock_gettime(CLOCK_REALTIME, &r_t2);
             cpu_t1 = diff(cpu_t1, cpu_t2);
             r_t1 = diff(r_t1, r_t2);
             printf("ENC REAL TIME = %ld.%ld\n", r_t1.tv_sec, r_t1.tv_nsec);
