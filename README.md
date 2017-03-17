@@ -25,6 +25,8 @@ Podem existir implementações do AES que fazem uso de aceleradores ou de execu�
 ## Como compilar/instalar
 Necessário apenas compilar os arquivos fontes. A compilação, realizada com o `gcc`, pode ser feita através do Makefile (`$ make`).
 
+Para realizar o benchmark é necessário apenas rodar o script presente no repositório `$./aes_run.sh`
+
 ## Como executar
 `$ ./aes arq_enc.pt [arq_dec.ct]`
 
