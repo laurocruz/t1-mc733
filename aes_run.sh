@@ -7,10 +7,10 @@ echo "COMPILANDO"
 make
 
 echo "EXECUTANDO"
-max=6
+max=5
 sumr=0
 sumc=0
-for i in `seq 2 $max`
+for i in `seq 1 $max`
 do
     echo $i
 	output=$(./aes test500MB.pt)
@@ -28,9 +28,10 @@ done
     sumr=$(echo "$sumr - $sumc" | bc)
 
     echo "MEDIA CPU = $sumc"
-    echo "REAL - CPU = $sumr"
+    sumc=$(echo "scale=8;$sumc*0.05" | bc)
+    printf "REAL - CPU = $sumr \n\n"
 
-    perf stat -B ./aes test500MB.pt
+    perf stat -B -d ./aes test500MB.pt
 
-
+    make clean
 

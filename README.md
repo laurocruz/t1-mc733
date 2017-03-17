@@ -48,7 +48,7 @@ O desempenho é medido principalmente através do tempo de execução das funç�
 Sobre o tempo perdido realizando essas outras tarefas, obtemos um levantamento da eficiência da máquina com a utilização da ferramenta `perf`, que utilizando a linha de comando
 
 ```
-$ perf stat -B ./aes arq_enc.pt [arq_dec.ct]
+$ perf stat -B -d ./aes arq_enc.pt [arq_dec.ct]
 ```
 
 nos mostra a quantidade de ciclos do processador para efetuar todo o programa, o tempo gasto em mudanças de contexto e de cpu (em caso de paralelismo), o tempo gasto com page faults e a quantidade de instruções por clock realizadas na execução.
